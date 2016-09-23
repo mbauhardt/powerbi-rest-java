@@ -1,13 +1,23 @@
 package com.satalyst.powerbi.operations;
 
-import com.google.gson.Gson;
-import com.satalyst.powerbi.*;
-import com.satalyst.powerbi.model.Column;
+import static com.google.common.base.Preconditions.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.ws.rs.core.UriBuilder;
-import java.util.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.gson.Gson;
+import com.satalyst.powerbi.PowerBiOperation;
+import com.satalyst.powerbi.PowerBiOperationExecutionException;
+import com.satalyst.powerbi.PowerBiRequest;
+import com.satalyst.powerbi.PowerBiResponse;
+import com.satalyst.powerbi.RateLimitExceededException;
+import com.satalyst.powerbi.RequestAuthenticationException;
+import com.satalyst.powerbi.model.Column;
 
 /**
  * @author Aidan Morgan
@@ -19,7 +29,6 @@ public class AddRow implements PowerBiOperation<Void> {
     private List<List<Object>> values;
 
     private Gson parser;
-
 
     public AddRow(UUID datasetId, String tableName, List<Column> types) {
         this.datasetId = checkNotNull(datasetId);
@@ -33,6 +42,14 @@ public class AddRow implements PowerBiOperation<Void> {
     public AddRow addRow(List<Object> row) {
         values.add(row);
         return this;
+    }
+
+    public int size() {
+        return values.size();
+    }
+
+    public void clear() {
+        values.clear();
     }
 
     @Override
