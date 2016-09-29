@@ -1,16 +1,13 @@
 package com.satalyst.powerbi.impl.model;
 
-import com.satalyst.powerbi.model.Column;
-import com.satalyst.powerbi.model.Table;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Objects;
+import com.satalyst.powerbi.model.Column;
+import com.satalyst.powerbi.model.Table;
 
 /**
  * @author Aidan Morgan
@@ -38,5 +35,19 @@ public class DefaultTable implements Table {
     @Override
     public List<Column> getColumns() {
         return columns;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final DefaultTable that = (DefaultTable) o;
+        return Objects.equal(name, that.name) &&
+                Objects.equal(columns, that.columns);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, columns);
     }
 }

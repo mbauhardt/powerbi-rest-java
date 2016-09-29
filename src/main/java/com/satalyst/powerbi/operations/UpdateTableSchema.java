@@ -1,17 +1,22 @@
 package com.satalyst.powerbi.operations;
 
-import com.google.gson.Gson;
-import com.satalyst.powerbi.*;
-import com.satalyst.powerbi.model.Table;
+import static com.google.common.base.Preconditions.*;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import javax.ws.rs.core.UriBuilder;
+
+import com.google.common.base.Objects;
+import com.google.gson.Gson;
+import com.satalyst.powerbi.PowerBiOperation;
+import com.satalyst.powerbi.PowerBiOperationExecutionException;
+import com.satalyst.powerbi.PowerBiRequest;
+import com.satalyst.powerbi.PowerBiResponse;
+import com.satalyst.powerbi.RateLimitExceededException;
+import com.satalyst.powerbi.RequestAuthenticationException;
+import com.satalyst.powerbi.model.Table;
 
 /**
  * @author Aidan Morgan
@@ -50,5 +55,20 @@ public class UpdateTableSchema implements PowerBiOperation<Void> {
         if(!SUCCESS_RESPONSES.contains(response.getStatus())) {
             throw new PowerBiOperationExecutionException("Expected response of 201.", response.getStatus(), response.getBody());
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final UpdateTableSchema that = (UpdateTableSchema) o;
+        return Objects.equal(datasetId, that.datasetId) &&
+                Objects.equal(tableName, that.tableName) &&
+                Objects.equal(schema, that.schema);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(datasetId, tableName, schema);
     }
 }

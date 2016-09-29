@@ -1,12 +1,18 @@
 package com.satalyst.powerbi.operations;
 
-import com.satalyst.powerbi.*;
+import static com.google.common.base.Preconditions.*;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.util.UUID;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import javax.ws.rs.core.UriBuilder;
+
+import com.google.common.base.Objects;
+import com.satalyst.powerbi.PowerBiOperation;
+import com.satalyst.powerbi.PowerBiOperationExecutionException;
+import com.satalyst.powerbi.PowerBiRequest;
+import com.satalyst.powerbi.PowerBiResponse;
+import com.satalyst.powerbi.RateLimitExceededException;
+import com.satalyst.powerbi.RequestAuthenticationException;
 
 /**
  * @author Aidan Morgan
@@ -37,5 +43,19 @@ public class ClearRows implements PowerBiOperation<Void> {
         if(response.getStatus() != 200) {
             throw new PowerBiOperationExecutionException("Expected 200 response.", response.getStatus(), response.getBody());
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ClearRows clearRows = (ClearRows) o;
+        return Objects.equal(datasetId, clearRows.datasetId) &&
+                Objects.equal(tableName, clearRows.tableName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(datasetId, tableName);
     }
 }

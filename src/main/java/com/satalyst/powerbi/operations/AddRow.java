@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.ws.rs.core.UriBuilder;
 
+import com.google.common.base.Objects;
 import com.google.gson.Gson;
 import com.satalyst.powerbi.PowerBiOperation;
 import com.satalyst.powerbi.PowerBiOperationExecutionException;
@@ -91,5 +92,20 @@ public class AddRow implements PowerBiOperation<Void> {
         out.put("rows", rowCollection);
 
         return parser.toJson(out);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AddRow addRow = (AddRow) o;
+        return Objects.equal(datasetId, addRow.datasetId) &&
+                Objects.equal(tableName, addRow.tableName) &&
+                Objects.equal(types, addRow.types);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(datasetId, tableName, types);
     }
 }

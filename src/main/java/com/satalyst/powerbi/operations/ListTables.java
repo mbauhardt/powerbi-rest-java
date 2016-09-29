@@ -1,16 +1,17 @@
 package com.satalyst.powerbi.operations;
 
-import com.google.gson.Gson;
+import static com.google.common.base.Preconditions.*;
+import static com.satalyst.powerbi.operations.MapUtils.*;
 
-import javax.ws.rs.core.UriBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.satalyst.powerbi.operations.MapUtils.getList;
-import static com.satalyst.powerbi.operations.MapUtils.getString;
+import javax.ws.rs.core.UriBuilder;
+
+import com.google.common.base.Objects;
+import com.google.gson.Gson;
 
 /**
  * @author Aidan Morgan
@@ -40,5 +41,18 @@ public class ListTables extends AbstractGetOperation<List<String>> {
         }
 
         return result;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ListTables that = (ListTables) o;
+        return Objects.equal(datasetId, that.datasetId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(datasetId);
     }
 }
